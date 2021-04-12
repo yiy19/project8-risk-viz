@@ -1,0 +1,45 @@
+---
+title: "Viz"
+author: "Ye Dam Yi"
+date: "4/12/2021"
+output: html_document
+---
+```{r libraries}
+require(tidyverse)
+require(haven)
+
+```
+
+
+```{r read-data}
+risk_all <- read_spss("/Users/yedam/Documents/GitHub/DSP/Project/project7-emotion-risk/data/risk_excluded.sav")
+risk_sur <- read_spss("/Users/yedam/Documents/GitHub/DSP/Project/project7-emotion-risk/data/risk_sur.sav")
+risk_pred <- read_spss("/Users/yedam/Documents/GitHub/DSP/Project/project7-emotion-risk/data/risk_pred.sav")
+
+write_sav(risk_all, "data/risk_all.sav")
+write_sav(risk_sur, "data/risk_sur.sav")
+write_sav(risk_pred, "data/risk_pred.sav")
+
+
+```
+
+```{r manipulation}
+risk_all %>% 
+  pivot_longer(c(riskyrisk, riskavrisk), names_to = "option", values_to = "riskrating") %>% 
+  ggplot(aes(x = option, y = riskrating)) +
+  geom_boxplot() +
+  labs(x = "Option",
+       y = "Risk Levels") +
+  scale_x_discrete(labels = c("Risk-Averse Option", "Risky Option")) +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()) +
+  theme_bw()
+
+```
+
+Problem: Error in pivot_longer(., c(riskyrisk, riskavrisk), names_to = "option",  : 
+  object 'risk_all' not found
+Calls: <Anonymous> ... withVisible -> eval -> eval -> %>% -> ggplot -> pivot_longer
+Execution halted
+
+Solution: If you have added eval = FALSE the earlier R code won't execute in which you have created your object. So when you again use that object in a different chunk it will fail with object not found message.
