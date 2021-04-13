@@ -23,7 +23,21 @@ write_sav(risk_pred, "data/risk_pred.sav")
 
 ```
 
-```{r manipulation}
+```{r theme}
+
+mytheme = theme(
+  axis.title.x = element_text(size = 16),
+  axis.text.x = element_text(size = 14),
+  axis.title.y = element_text(size = 16),
+  axis.ticks.length=unit(.25, "cm"),
+  axis.text = element_text(size = 12)
+)
+
+```
+
+```{r manipulation, fig.height=2, fig.width=3}
+jpeg("manipulationcheck.jpg", width = 500, height = 380)
+
 risk_all %>% 
   pivot_longer(c(riskyrisk, riskavrisk), names_to = "option", values_to = "riskrating") %>% 
   ggplot(aes(x = option, y = riskrating)) +
@@ -31,9 +45,11 @@ risk_all %>%
   labs(x = "Option",
        y = "Risk Levels") +
   scale_x_discrete(labels = c("Risk-Averse Option", "Risky Option")) +
-  theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank()) +
-  theme_bw()
+  theme_classic() +
+  mytheme
+dev.off()
+
+
 
 ```
 
@@ -43,3 +59,9 @@ Calls: <Anonymous> ... withVisible -> eval -> eval -> %>% -> ggplot -> pivot_lon
 Execution halted
 
 Solution: If you have added eval = FALSE the earlier R code won't execute in which you have created your object. So when you again use that object in a different chunk it will fail with object not found message.
+
+
+```{r risk-taking levels}
+
+
+```
