@@ -21,16 +21,23 @@ write_sav(risk_sur, "data/risk_sur.sav")
 write_sav(risk_pred, "data/risk_pred.sav")
 
 
+risk_all <- risk_all %>% 
+  mutate(gender = as_factor(gender),
+         condition = as_factor(condition),
+         rel_self = as_factor(rel_self),
+         rel_friend1 = as_factor(rel_friend1),
+         rel_friend2 = as_factor(rel_friend2)) 
+
 ```
 
 ```{r theme}
 
 mytheme = theme(
-  axis.title.x = element_text(size = 16),
-  axis.text.x = element_text(size = 14),
-  axis.title.y = element_text(size = 16),
+  axis.title.x = element_text(size = 22),
+  axis.text.x = element_text(size = 20),
+  axis.title.y = element_text(size = 22),
   axis.ticks.length=unit(.25, "cm"),
-  axis.text = element_text(size = 12)
+  axis.text = element_text(size = 18)
 )
 
 ```
@@ -60,8 +67,64 @@ Execution halted
 
 Solution: If you have added eval = FALSE the earlier R code won't execute in which you have created your object. So when you again use that object in a different chunk it will fail with object not found message.
 
+```{r risklevel}
+jpeg("risklevel.jpg", width = 500, height = 380)
 
-```{r risk-taking levels}
+risk_all %>% 
+  ggplot(aes(y = risklevel, x = condition)) +
+  geom_boxplot() +
+  labs(x = "Condition",
+       y = "Risk-Taking Level") +
+  scale_x_discrete(labels = c("Self", "Surrogate", "Prediction")) +
+  theme_classic() +
+  mytheme
+dev.off()
 
+```
+
+
+```{r neg}
+jpeg("neg.jpg", width = 500, height = 380)
+
+risk_all %>% 
+  ggplot(aes(y = neg, x = condition)) +
+  geom_boxplot() +
+  labs(x = "Condition",
+       y = "Negative Emotion") +
+  scale_x_discrete(labels = c("Self", "Surrogate", "Prediction")) +
+  theme_classic() +
+  mytheme
+dev.off()
+
+```
+
+
+```{r pos}
+jpeg("pos.jpg", width = 500, height = 380)
+
+risk_all %>% 
+  ggplot(aes(y = neg, x = condition)) +
+  geom_boxplot() +
+  labs(x = "Condition",
+       y = "Positive Emotion") +
+  scale_x_discrete(labels = c("Self", "Surrogate", "Prediction")) +
+  theme_classic() +
+  mytheme
+dev.off()
+
+```
+
+```{r alert}
+jpeg("alert.jpg", width = 500, height = 380)
+
+risk_all %>% 
+  ggplot(aes(y = alert, x = condition)) +
+  geom_boxplot() +
+  labs(x = "Condition",
+       y = "Alertness") +
+  scale_x_discrete(labels = c("Self", "Surrogate", "Prediction")) +
+  theme_classic() +
+  mytheme
+dev.off()
 
 ```

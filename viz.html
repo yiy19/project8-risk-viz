@@ -189,13 +189,21 @@ risk_pred &lt;- read_spss(&quot;/Users/yedam/Documents/GitHub/DSP/Project/projec
 
 write_sav(risk_all, &quot;data/risk_all.sav&quot;)
 write_sav(risk_sur, &quot;data/risk_sur.sav&quot;)
-write_sav(risk_pred, &quot;data/risk_pred.sav&quot;)</code></pre>
+write_sav(risk_pred, &quot;data/risk_pred.sav&quot;)
+
+
+risk_all &lt;- risk_all %&gt;% 
+  mutate(gender = as_factor(gender),
+         condition = as_factor(condition),
+         rel_self = as_factor(rel_self),
+         rel_friend1 = as_factor(rel_friend1),
+         rel_friend2 = as_factor(rel_friend2)) </code></pre>
 <pre class="r"><code>mytheme = theme(
-  axis.title.x = element_text(size = 16),
-  axis.text.x = element_text(size = 14),
-  axis.title.y = element_text(size = 16),
+  axis.title.x = element_text(size = 22),
+  axis.text.x = element_text(size = 20),
+  axis.title.y = element_text(size = 22),
   axis.ticks.length=unit(.25, &quot;cm&quot;),
-  axis.text = element_text(size = 12)
+  axis.text = element_text(size = 18)
 )</code></pre>
 <pre class="r"><code>jpeg(&quot;manipulationcheck.jpg&quot;, width = 500, height = 380)
 
@@ -214,6 +222,62 @@ risk_all %&gt;%
 ##                 2</code></pre>
 <p>Problem: Error in pivot_longer(., c(riskyrisk, riskavrisk), names_to = “option”, : object ‘risk_all’ not found Calls: <Anonymous> … withVisible -&gt; eval -&gt; eval -&gt; %&gt;% -&gt; ggplot -&gt; pivot_longer Execution halted</p>
 <p>Solution: If you have added eval = FALSE the earlier R code won’t execute in which you have created your object. So when you again use that object in a different chunk it will fail with object not found message.</p>
+<pre class="r"><code>jpeg(&quot;risklevel.jpg&quot;, width = 500, height = 380)
+
+risk_all %&gt;% 
+  ggplot(aes(y = risklevel, x = condition)) +
+  geom_boxplot() +
+  labs(x = &quot;Condition&quot;,
+       y = &quot;Risk-Taking Level&quot;) +
+  scale_x_discrete(labels = c(&quot;Self&quot;, &quot;Surrogate&quot;, &quot;Prediction&quot;)) +
+  theme_classic() +
+  mytheme</code></pre>
+<pre><code>## Don&#39;t know how to automatically pick scale for object of type haven_labelled/vctrs_vctr/double. Defaulting to continuous.</code></pre>
+<pre class="r"><code>dev.off()</code></pre>
+<pre><code>## quartz_off_screen 
+##                 2</code></pre>
+<pre class="r"><code>jpeg(&quot;neg.jpg&quot;, width = 500, height = 380)
+
+risk_all %&gt;% 
+  ggplot(aes(y = neg, x = condition)) +
+  geom_boxplot() +
+  labs(x = &quot;Condition&quot;,
+       y = &quot;Negative Emotion&quot;) +
+  scale_x_discrete(labels = c(&quot;Self&quot;, &quot;Surrogate&quot;, &quot;Prediction&quot;)) +
+  theme_classic() +
+  mytheme</code></pre>
+<pre><code>## Don&#39;t know how to automatically pick scale for object of type haven_labelled/vctrs_vctr/double. Defaulting to continuous.</code></pre>
+<pre class="r"><code>dev.off()</code></pre>
+<pre><code>## quartz_off_screen 
+##                 2</code></pre>
+<pre class="r"><code>jpeg(&quot;pos.jpg&quot;, width = 500, height = 380)
+
+risk_all %&gt;% 
+  ggplot(aes(y = neg, x = condition)) +
+  geom_boxplot() +
+  labs(x = &quot;Condition&quot;,
+       y = &quot;Positive Emotion&quot;) +
+  scale_x_discrete(labels = c(&quot;Self&quot;, &quot;Surrogate&quot;, &quot;Prediction&quot;)) +
+  theme_classic() +
+  mytheme</code></pre>
+<pre><code>## Don&#39;t know how to automatically pick scale for object of type haven_labelled/vctrs_vctr/double. Defaulting to continuous.</code></pre>
+<pre class="r"><code>dev.off()</code></pre>
+<pre><code>## quartz_off_screen 
+##                 2</code></pre>
+<pre class="r"><code>jpeg(&quot;alert.jpg&quot;, width = 500, height = 380)
+
+risk_all %&gt;% 
+  ggplot(aes(y = alert, x = condition)) +
+  geom_boxplot() +
+  labs(x = &quot;Condition&quot;,
+       y = &quot;Alertness&quot;) +
+  scale_x_discrete(labels = c(&quot;Self&quot;, &quot;Surrogate&quot;, &quot;Prediction&quot;)) +
+  theme_classic() +
+  mytheme</code></pre>
+<pre><code>## Don&#39;t know how to automatically pick scale for object of type haven_labelled/vctrs_vctr/double. Defaulting to continuous.</code></pre>
+<pre class="r"><code>dev.off()</code></pre>
+<pre><code>## quartz_off_screen 
+##                 2</code></pre>
 
 
 
