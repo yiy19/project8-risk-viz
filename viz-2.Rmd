@@ -1,7 +1,7 @@
 ---
-title: "Viz"
+title: "viz2"
 author: "Ye Dam Yi"
-date: "4/12/2021"
+date: "4/14/2021"
 output: html_document
 ---
 ```{r libraries}
@@ -42,93 +42,88 @@ mytheme = theme(
 
 ```
 
-```{r manipulation, fig.height=2, fig.width=3}
-jpeg("manipulationcheck.jpg", width = 500, height = 380)
 
-risk_all %>% 
-  pivot_longer(c(riskyrisk, riskavrisk), names_to = "option", values_to = "riskrating")  %>% 
-  ggplot(aes(x = option, y = riskrating, fill = option)) +
-  geom_boxplot() +
-  labs(x = "",
-       y = "Risk Levels") +
-  scale_x_discrete(labels = c("Stay with Friends", "Approach Barista")) +
-  theme_classic() +
-  mytheme
-dev.off()
-
-
-
-```
-
-Problem: Error in pivot_longer(., c(riskyrisk, riskavrisk), names_to = "option",  : 
-  object 'risk_all' not found
-Calls: <Anonymous> ... withVisible -> eval -> eval -> %>% -> ggplot -> pivot_longer
-Execution halted
-
-Solution: If you have added eval = FALSE the earlier R code won't execute in which you have created your object. So when you again use that object in a different chunk it will fail with object not found message.
-
-```{r risklevel}
-jpeg("risklevel.jpg", width = 500, height = 380)
-
-risk_all %>% 
+```{r data-manipulation}
+df <- risk_all %>% 
   group_by(condition) %>% 
-  mutate(mean = mean(risklevel),
-         sd = sd(risklevel)) %>% 
-  ggplot(aes(y = risklevel, x = condition)) +
-  geom_boxplot() +
+  summarise(
+    mean_risk = mean(risklevel),
+    sd_risk = sd(risklevel),
+    mean_neg = mean(neg),
+    sd_neg = sd(neg),
+    mean_pos = mean(pos),
+    sd_pos = sd(pos),
+    mean_alert = mean(alert),
+    sd_alert = sd(alert)
+  )
+df
+```
+```{r risklevels}
+jpeg("rt_bar.jpg", width = 500, height = 380)
+
+df %>% 
+  ggplot(aes(y = mean_risk, x = condition)) +
+  geom_bar(stat = "identity", fill = "grey",position=position_dodge(), width = .5) +
+  geom_errorbar(aes(ymin = mean_risk - sd_risk, ymax = mean_risk + sd_risk),  width=.15, position=position_dodge(.9)) +
   labs(x = "",
-       y = "Risk-Taking Level") +
-  geom_errorbar(aes(ymin = risklevel - sd, ymax = risklevel +sd)) +
+       y = "Risk Taking Levels") +
   scale_x_discrete(labels = c("Self", "Surrogate", "Prediction")) +
+  scale_y_continuous(limits = c(0,4)) +
   theme_classic() +
   mytheme
+
 dev.off()
 
 ```
-
 
 ```{r neg}
-jpeg("neg.jpg", width = 500, height = 380)
+jpeg("neg_bar.jpg", width = 500, height = 380)
 
-risk_all %>% 
-  ggplot(aes(y = neg, x = condition)) +
-  geom_boxplot() +
+df %>% 
+  ggplot(aes(y = mean_neg, x = condition)) +
+  geom_bar(stat = "identity", fill = "grey",position=position_dodge(), width = .5) +
+  geom_errorbar(aes(ymin = mean_neg - sd_neg, ymax = mean_neg + sd_neg),  width=.15, position=position_dodge(.9)) +
   labs(x = "",
        y = "Negative Emotion") +
   scale_x_discrete(labels = c("Self", "Surrogate", "Prediction")) +
+  scale_y_continuous(limits = c(0,4)) +
   theme_classic() +
   mytheme
+
 dev.off()
 
 ```
 
-
 ```{r pos}
-jpeg("pos.jpg", width = 500, height = 380)
+jpeg("pos_bar.jpg", width = 500, height = 380)
 
-risk_all %>% 
-  ggplot(aes(y = neg, x = condition)) +
-  geom_boxplot() +
+df %>% 
+  ggplot(aes(y = mean_pos, x = condition)) +
+  geom_bar(stat = "identity", fill = "grey",position=position_dodge(), width = .5) +
+  geom_errorbar(aes(ymin = mean_pos - sd_pos, ymax = mean_pos + sd_pos), width=.15, position=position_dodge(.9)) +
   labs(x = "",
        y = "Positive Emotion") +
   scale_x_discrete(labels = c("Self", "Surrogate", "Prediction")) +
   theme_classic() +
   mytheme
+
 dev.off()
 
 ```
 
 ```{r alert}
-jpeg("alert.jpg", width = 500, height = 380)
+jpeg("alert_bar.jpg", width = 500, height = 380)
 
-risk_all %>% 
-  ggplot(aes(y = alert, x = condition)) +
-  geom_boxplot() +
+df %>% 
+  ggplot(aes(y = mean_alert, x = condition)) +
+  geom_bar(stat = "identity", fill = "grey", position=position_dodge(), width = .5) +
+  geom_errorbar(aes(ymin = mean_alert - sd_alert, ymax = mean_alert + sd_alert), width=.15, position=position_dodge(.9)) +
   labs(x = "",
        y = "Alertness") +
   scale_x_discrete(labels = c("Self", "Surrogate", "Prediction")) +
   theme_classic() +
   mytheme
+
 dev.off()
 
 ```
