@@ -49,9 +49,9 @@ risk_all %>%
   pivot_longer(c(riskyrisk, riskavrisk), names_to = "option", values_to = "riskrating") %>% 
   ggplot(aes(x = option, y = riskrating)) +
   geom_boxplot() +
-  labs(x = "Option",
+  labs(x = "",
        y = "Risk Levels") +
-  scale_x_discrete(labels = c("Risk-Averse Option", "Risky Option")) +
+  scale_x_discrete(labels = c("Stay with Friends", "Approach Barista")) +
   theme_classic() +
   mytheme
 dev.off()
@@ -73,7 +73,7 @@ jpeg("risklevel.jpg", width = 500, height = 380)
 risk_all %>% 
   ggplot(aes(y = risklevel, x = condition)) +
   geom_boxplot() +
-  labs(x = "Condition",
+  labs(x = "",
        y = "Risk-Taking Level") +
   scale_x_discrete(labels = c("Self", "Surrogate", "Prediction")) +
   theme_classic() +
@@ -89,7 +89,7 @@ jpeg("neg.jpg", width = 500, height = 380)
 risk_all %>% 
   ggplot(aes(y = neg, x = condition)) +
   geom_boxplot() +
-  labs(x = "Condition",
+  labs(x = "",
        y = "Negative Emotion") +
   scale_x_discrete(labels = c("Self", "Surrogate", "Prediction")) +
   theme_classic() +
@@ -105,7 +105,7 @@ jpeg("pos.jpg", width = 500, height = 380)
 risk_all %>% 
   ggplot(aes(y = neg, x = condition)) +
   geom_boxplot() +
-  labs(x = "Condition",
+  labs(x = "",
        y = "Positive Emotion") +
   scale_x_discrete(labels = c("Self", "Surrogate", "Prediction")) +
   theme_classic() +
@@ -120,7 +120,7 @@ jpeg("alert.jpg", width = 500, height = 380)
 risk_all %>% 
   ggplot(aes(y = alert, x = condition)) +
   geom_boxplot() +
-  labs(x = "Condition",
+  labs(x = "",
        y = "Alertness") +
   scale_x_discrete(labels = c("Self", "Surrogate", "Prediction")) +
   theme_classic() +

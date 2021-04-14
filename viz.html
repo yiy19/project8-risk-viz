@@ -211,9 +211,9 @@ risk_all %&gt;%
   pivot_longer(c(riskyrisk, riskavrisk), names_to = &quot;option&quot;, values_to = &quot;riskrating&quot;) %&gt;% 
   ggplot(aes(x = option, y = riskrating)) +
   geom_boxplot() +
-  labs(x = &quot;Option&quot;,
+  labs(x = &quot;&quot;,
        y = &quot;Risk Levels&quot;) +
-  scale_x_discrete(labels = c(&quot;Risk-Averse Option&quot;, &quot;Risky Option&quot;)) +
+  scale_x_discrete(labels = c(&quot;Stay with Friends&quot;, &quot;Approach Barista&quot;)) +
   theme_classic() +
   mytheme</code></pre>
 <pre><code>## Don&#39;t know how to automatically pick scale for object of type haven_labelled/vctrs_vctr/double. Defaulting to continuous.</code></pre>
@@ -227,7 +227,7 @@ risk_all %&gt;%
 risk_all %&gt;% 
   ggplot(aes(y = risklevel, x = condition)) +
   geom_boxplot() +
-  labs(x = &quot;Condition&quot;,
+  labs(x = &quot;&quot;,
        y = &quot;Risk-Taking Level&quot;) +
   scale_x_discrete(labels = c(&quot;Self&quot;, &quot;Surrogate&quot;, &quot;Prediction&quot;)) +
   theme_classic() +
@@ -241,7 +241,7 @@ risk_all %&gt;%
 risk_all %&gt;% 
   ggplot(aes(y = neg, x = condition)) +
   geom_boxplot() +
-  labs(x = &quot;Condition&quot;,
+  labs(x = &quot;&quot;,
        y = &quot;Negative Emotion&quot;) +
   scale_x_discrete(labels = c(&quot;Self&quot;, &quot;Surrogate&quot;, &quot;Prediction&quot;)) +
   theme_classic() +
@@ -255,7 +255,7 @@ risk_all %&gt;%
 risk_all %&gt;% 
   ggplot(aes(y = neg, x = condition)) +
   geom_boxplot() +
-  labs(x = &quot;Condition&quot;,
+  labs(x = &quot;&quot;,
        y = &quot;Positive Emotion&quot;) +
   scale_x_discrete(labels = c(&quot;Self&quot;, &quot;Surrogate&quot;, &quot;Prediction&quot;)) +
   theme_classic() +
@@ -269,7 +269,7 @@ risk_all %&gt;%
 risk_all %&gt;% 
   ggplot(aes(y = alert, x = condition)) +
   geom_boxplot() +
-  labs(x = &quot;Condition&quot;,
+  labs(x = &quot;&quot;,
        y = &quot;Alertness&quot;) +
   scale_x_discrete(labels = c(&quot;Self&quot;, &quot;Surrogate&quot;, &quot;Prediction&quot;)) +
   theme_classic() +
