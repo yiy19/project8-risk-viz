@@ -208,15 +208,16 @@ risk_all &lt;- risk_all %&gt;%
 <pre class="r"><code>jpeg(&quot;manipulationcheck.jpg&quot;, width = 500, height = 380)
 
 risk_all %&gt;% 
-  pivot_longer(c(riskyrisk, riskavrisk), names_to = &quot;option&quot;, values_to = &quot;riskrating&quot;)  %&gt;% 
+  pivot_longer(c(riskyrisk, riskavrisk), names_to = &quot;option&quot;, values_to = &quot;riskrating&quot;) %&gt;%  
   ggplot(aes(x = option, y = riskrating, fill = option)) +
-  geom_boxplot() +
+  geom_bar(stat = &quot;identity&quot;, color = &quot;grey&quot;) +
   labs(x = &quot;&quot;,
        y = &quot;Risk Levels&quot;) +
   scale_x_discrete(labels = c(&quot;Stay with Friends&quot;, &quot;Approach Barista&quot;)) +
+  scale_y_continuous(limits = c(0, 4)) +
   theme_classic() +
   mytheme</code></pre>
-<pre><code>## Don&#39;t know how to automatically pick scale for object of type haven_labelled/vctrs_vctr/double. Defaulting to continuous.</code></pre>
+<pre><code>## Warning: Removed 1133 rows containing missing values (geom_bar).</code></pre>
 <pre class="r"><code>dev.off()</code></pre>
 <pre><code>## quartz_off_screen 
 ##                 2</code></pre>

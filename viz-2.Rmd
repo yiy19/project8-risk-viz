@@ -42,6 +42,33 @@ mytheme = theme(
 
 ```
 
+```{r manipulation, fig.height=2, fig.width=3}
+jpeg("manipulationcheck.jpg", width = 500, height = 380)
+
+risk_all %>% 
+  pivot_longer(c(riskyrisk, riskavrisk), names_to = "option", values_to = "riskrating") %>% 
+  group_by(option) %>% 
+  summarise(
+    mean = mean(riskrating),
+    sd = sd(riskrating)
+  ) %>% 
+  ggplot(aes(x = option, y = mean)) +
+  
+  geom_bar(stat = "identity", fill = "grey",position=position_dodge(), width = .5) +  
+  geom_errorbar(aes(ymin= mean-sd, ymax = mean + sd),  width=.15, position=position_dodge(.9)) +
+  labs(x = "",
+       y = "Risk Levels") +
+  scale_x_discrete(labels = c("Stay with Friends", "Approach Barista")) +
+  scale_y_continuous(limits = c(-1, 4)) +
+  theme_classic() +
+  mytheme
+
+
+dev.off()
+
+
+
+```
 
 ```{r data-manipulation}
 df <- risk_all %>% 
@@ -68,7 +95,7 @@ df %>%
   labs(x = "",
        y = "Risk Taking Levels") +
   scale_x_discrete(labels = c("Self", "Surrogate", "Prediction")) +
-  scale_y_continuous(limits = c(0,4)) +
+  scale_y_continuous(limits = c(0,6), breaks = c(0,1,2,3,4,5,6)) +
   theme_classic() +
   mytheme
 

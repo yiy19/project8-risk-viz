@@ -205,6 +205,30 @@ risk_all &lt;- risk_all %&gt;%
   axis.ticks.length=unit(.25, &quot;cm&quot;),
   axis.text = element_text(size = 18)
 )</code></pre>
+<pre class="r"><code>jpeg(&quot;manipulationcheck.jpg&quot;, width = 500, height = 380)
+
+risk_all %&gt;% 
+  pivot_longer(c(riskyrisk, riskavrisk), names_to = &quot;option&quot;, values_to = &quot;riskrating&quot;) %&gt;% 
+  group_by(option) %&gt;% 
+  summarise(
+    mean = mean(riskrating),
+    sd = sd(riskrating)
+  ) %&gt;% 
+  ggplot(aes(x = option, y = mean)) +
+  
+  geom_bar(stat = &quot;identity&quot;, fill = &quot;grey&quot;,position=position_dodge(), width = .5) +  
+  geom_errorbar(aes(ymin= mean-sd, ymax = mean + sd),  width=.15, position=position_dodge(.9)) +
+  labs(x = &quot;&quot;,
+       y = &quot;Risk Levels&quot;) +
+  scale_x_discrete(labels = c(&quot;Stay with Friends&quot;, &quot;Approach Barista&quot;)) +
+  scale_y_continuous(limits = c(-1, 4)) +
+  theme_classic() +
+  mytheme
+
+
+dev.off()</code></pre>
+<pre><code>## quartz_off_screen 
+##                 2</code></pre>
 <pre class="r"><code>df &lt;- risk_all %&gt;% 
   group_by(condition) %&gt;% 
   summarise(
@@ -234,11 +258,11 @@ df %&gt;%
   labs(x = &quot;&quot;,
        y = &quot;Risk Taking Levels&quot;) +
   scale_x_discrete(labels = c(&quot;Self&quot;, &quot;Surrogate&quot;, &quot;Prediction&quot;)) +
-  scale_y_continuous(limits = c(0,4)) +
+  scale_y_continuous(limits = c(0,6), breaks = c(0,1,2,3,4,5,6)) +
   theme_classic() +
-  mytheme</code></pre>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_bar).</code></pre>
-<pre class="r"><code>dev.off()</code></pre>
+  mytheme
+
+dev.off()</code></pre>
 <pre><code>## quartz_off_screen 
 ##                 2</code></pre>
 <pre class="r"><code>jpeg(&quot;neg_bar.jpg&quot;, width = 500, height = 380)

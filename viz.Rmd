@@ -46,14 +46,17 @@ mytheme = theme(
 jpeg("manipulationcheck.jpg", width = 500, height = 380)
 
 risk_all %>% 
-  pivot_longer(c(riskyrisk, riskavrisk), names_to = "option", values_to = "riskrating")  %>% 
+  pivot_longer(c(riskyrisk, riskavrisk), names_to = "option", values_to = "riskrating") %>%  
   ggplot(aes(x = option, y = riskrating, fill = option)) +
-  geom_boxplot() +
+  geom_bar(stat = "identity", color = "grey") +
   labs(x = "",
        y = "Risk Levels") +
   scale_x_discrete(labels = c("Stay with Friends", "Approach Barista")) +
+  scale_y_continuous(limits = c(0, 4)) +
   theme_classic() +
   mytheme
+
+
 dev.off()
 
 
