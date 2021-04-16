@@ -219,7 +219,7 @@ risk_all %&gt;%
   geom_bar(stat = &quot;identity&quot;, fill = &quot;grey&quot;,position=position_dodge(), width = .5) +  
   geom_errorbar(aes(ymin= mean-sd, ymax = mean + sd),  width=.15, position=position_dodge(.9)) +
   labs(x = &quot;&quot;,
-       y = &quot;Risk Levels&quot;) +
+       y = &quot;Riskiness&quot;) +
   scale_x_discrete(labels = c(&quot;Stay with Friends&quot;, &quot;Approach Barista&quot;)) +
   scale_y_continuous(limits = c(-1, 4)) +
   theme_classic() +

@@ -57,7 +57,7 @@ risk_all %>%
   geom_bar(stat = "identity", fill = "grey",position=position_dodge(), width = .5) +  
   geom_errorbar(aes(ymin= mean-sd, ymax = mean + sd),  width=.15, position=position_dodge(.9)) +
   labs(x = "",
-       y = "Risk Levels") +
+       y = "Riskiness") +
   scale_x_discrete(labels = c("Stay with Friends", "Approach Barista")) +
   scale_y_continuous(limits = c(-1, 4)) +
   theme_classic() +
