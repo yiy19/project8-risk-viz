@@ -198,6 +198,76 @@ risk_all &lt;- risk_all %&gt;%
          rel_self = as_factor(rel_self),
          rel_friend1 = as_factor(rel_friend1),
          rel_friend2 = as_factor(rel_friend2)) </code></pre>
+<pre class="r"><code>risk_all &lt;- risk_all %&gt;% 
+  mutate(risklevel = case_when(risklevel == 0 ~ 1,
+                               risklevel == 1 ~ 2,
+                               risklevel == 2 ~ 3,
+                               risklevel == 3 ~ 4,
+                               risklevel == 4 ~ 5,
+                               risklevel == 5 ~ 6,
+                               risklevel == 6 ~7),
+         neg = case_when(neg == 0 ~ 1,
+                         neg == 1 ~ 2,
+                         neg == 2 ~ 3,
+                         neg == 3 ~ 4,
+                         neg == 4 ~ 5),
+         pos = case_when(pos == 0 ~ 1,
+                         pos == 1 ~ 2,
+                         pos == 2 ~ 3,
+                         pos == 3 ~ 4,
+                         pos == 4 ~ 5),
+         alert = case_when(alert == 0 ~ 1,
+                         alert == 1 ~ 2,
+                         alert == 2 ~ 3,
+                         alert == 3 ~ 4,
+                         alert == 4 ~ 5),
+         riskyrisk = case_when(riskyrisk == 0 ~ 1,
+                         riskyrisk == 1 ~ 2,
+                         riskyrisk == 2 ~ 3,
+                         riskyrisk == 3 ~ 4,
+                         riskyrisk == 4 ~ 5),
+         riskavrisk = case_when(riskavrisk == 0 ~ 1,
+                         riskavrisk == 1 ~ 2,
+                         riskavrisk == 2 ~ 3,
+                         riskavrisk == 3 ~ 4,
+                         riskavrisk == 4 ~ 5))
+
+summary(risk_all)</code></pre>
+<pre><code>##     consent       time             age                              gender   
+##  Min.   :1   Min.   :  45.0   Min.   :  18.00   Male                   :295  
+##  1st Qu.:1   1st Qu.: 236.0   1st Qu.:  30.00   Female                 :274  
+##  Median :1   Median : 321.0   Median :  36.00   Non-binary             :  0  
+##  Mean   :1   Mean   : 397.8   Mean   :  43.14   Other/Prefer not to say:  0  
+##  3rd Qu.:1   3rd Qu.: 444.0   3rd Qu.:  48.00                                
+##  Max.   :1   Max.   :3142.0   Max.   :1985.00                                
+##    gendcond              condition     friend1            friend2         
+##  Length:569         Self      :192   Length:569         Length:569        
+##  Class :character   Surrogate :191   Class :character   Class :character  
+##  Mode  :character   Prediction:186   Mode  :character   Mode  :character  
+##                                                                           
+##                                                                           
+##                                                                           
+##    risklevel          pos             neg           alert         riskyrisk    
+##  Min.   :1.000   Min.   :1.000   Min.   :1.00   Min.   :1.000   Min.   :1.000  
+##  1st Qu.:4.000   1st Qu.:4.000   1st Qu.:2.00   1st Qu.:4.000   1st Qu.:2.000  
+##  Median :5.000   Median :4.000   Median :3.00   Median :4.000   Median :3.000  
+##  Mean   :4.708   Mean   :4.035   Mean   :3.03   Mean   :3.979   Mean   :2.663  
+##  3rd Qu.:6.000   3rd Qu.:5.000   3rd Qu.:4.00   3rd Qu.:5.000   3rd Qu.:4.000  
+##  Max.   :7.000   Max.   :5.000   Max.   :5.00   Max.   :5.000   Max.   :5.000  
+##    riskavrisk    rel_self  rel_friend1 rel_friend2   attention1   attention2
+##  Min.   :1.000   YES:314   YES:268     YES:280     Min.   :7    Min.   :3   
+##  1st Qu.:1.000   NO :255   NO :301     NO :289     1st Qu.:7    1st Qu.:3   
+##  Median :1.000                                     Median :7    Median :3   
+##  Mean   :1.786                                     Mean   :7    Mean   :3   
+##  3rd Qu.:2.000                                     3rd Qu.:7    3rd Qu.:3   
+##  Max.   :5.000                                     Max.   :7    Max.   :3   
+##      code                 id         code_mturk       
+##  Length:569         Min.   :  1.0   Length:569        
+##  Class :character   1st Qu.:160.0   Class :character  
+##  Mode  :character   Median :307.0   Mode  :character  
+##                     Mean   :307.1                     
+##                     3rd Qu.:457.0                     
+##                     Max.   :607.0</code></pre>
 <pre class="r"><code>mytheme = theme(
   axis.title.x = element_text(size = 22),
   axis.text.x = element_text(size = 20),
@@ -215,16 +285,18 @@ risk_all %&gt;%
     sd = sd(riskrating)
   ) %&gt;% 
   ggplot(aes(x = option, y = mean)) +
-  
-  geom_bar(stat = &quot;identity&quot;, fill = &quot;grey&quot;,position=position_dodge(), width = .5) +  
+  geom_bar(stat = &quot;identity&quot;, fill = &quot;grey&quot;, position=position_dodge(), width = .5) +  
   geom_errorbar(aes(ymin= mean-sd, ymax = mean + sd),  width=.15, position=position_dodge(.9)) +
   labs(x = &quot;&quot;,
        y = &quot;Riskiness&quot;) +
   scale_x_discrete(labels = c(&quot;Stay with Friends&quot;, &quot;Approach Barista&quot;)) +
-  scale_y_continuous(limits = c(-1, 4)) +
+      coord_cartesian(ylim=c(0, 5)) +
   theme_classic() +
   mytheme
 
+# Hadley explains this on pp. 99; 133 of his ggplot2 book (1st edition), or pp. 160 - 161 if you have the second edition.
+# 
+# The issue is that, as you say, limits inside the scale or setting ylim() causes data to be thrown away, as they are constraining the data. For a true zoom (keep all the data), you need to set the limits inside of the Cartesian coordinate system (or other coordinate systems https://ggplot2.tidyverse.org/reference/#section-coordinate-systems). For more see: http://docs.ggplot2.org/current/coord_cartesian.html
 
 dev.off()</code></pre>
 <pre><code>## quartz_off_screen 
@@ -245,20 +317,21 @@ df</code></pre>
 <pre><code>## # A tibble: 3 x 9
 ##   condition  mean_risk sd_risk mean_neg sd_neg mean_pos sd_pos mean_alert
 ## * &lt;fct&gt;          &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;
-## 1 Self            3.24    1.78     2      1.20     2.94  0.841       2.95
-## 2 Surrogate       3.88    1.70     2.18   1.20     3.10  0.767       3.02
-## 3 Prediction      4.02    1.43     1.91   1.15     3.06  0.829       2.96
+## 1 Self            4.24    1.78     3      1.20     3.94  0.841       3.95
+## 2 Surrogate       4.88    1.70     3.18   1.20     4.10  0.767       4.02
+## 3 Prediction      5.02    1.43     2.91   1.15     4.06  0.829       3.96
 ## # … with 1 more variable: sd_alert &lt;dbl&gt;</code></pre>
 <pre class="r"><code>jpeg(&quot;rt_bar.jpg&quot;, width = 500, height = 380)
 
 df %&gt;% 
   ggplot(aes(y = mean_risk, x = condition)) +
-  geom_bar(stat = &quot;identity&quot;, fill = &quot;grey&quot;,position=position_dodge(), width = .5) +
+  geom_bar(stat = &quot;identity&quot;, fill = &quot;grey&quot;, position=position_dodge(), width = .5) +
   geom_errorbar(aes(ymin = mean_risk - sd_risk, ymax = mean_risk + sd_risk),  width=.15, position=position_dodge(.9)) +
   labs(x = &quot;&quot;,
        y = &quot;Risk Taking Levels&quot;) +
   scale_x_discrete(labels = c(&quot;Self&quot;, &quot;Surrogate&quot;, &quot;Prediction&quot;)) +
-  scale_y_continuous(limits = c(0,6), breaks = c(0,1,2,3,4,5,6)) +
+  coord_cartesian(ylim = c(1,7)) +
+  scale_y_continuous(breaks = c(1,2,3,4,5,6,7)) +
   theme_classic() +
   mytheme
 
@@ -274,8 +347,8 @@ df %&gt;%
   labs(x = &quot;&quot;,
        y = &quot;Negative Emotion&quot;) +
   scale_x_discrete(labels = c(&quot;Self&quot;, &quot;Surrogate&quot;, &quot;Prediction&quot;)) +
-  scale_y_continuous(limits = c(0,4)) +
-  theme_classic() +
+coord_cartesian(ylim = c(1,5)) +
+  scale_y_continuous(breaks = c(1,2,3,4,5)) +  theme_classic() +
   mytheme
 
 dev.off()</code></pre>
@@ -290,6 +363,8 @@ df %&gt;%
   labs(x = &quot;&quot;,
        y = &quot;Positive Emotion&quot;) +
   scale_x_discrete(labels = c(&quot;Self&quot;, &quot;Surrogate&quot;, &quot;Prediction&quot;)) +
+  coord_cartesian(ylim = c(1,5)) +
+  scale_y_continuous(breaks = c(1,2,3,4,5)) +
   theme_classic() +
   mytheme
 
@@ -305,6 +380,8 @@ df %&gt;%
   labs(x = &quot;&quot;,
        y = &quot;Alertness&quot;) +
   scale_x_discrete(labels = c(&quot;Self&quot;, &quot;Surrogate&quot;, &quot;Prediction&quot;)) +
+    coord_cartesian(ylim = c(1,5)) +
+  scale_y_continuous(breaks = c(1,2,3,4,5)) +
   theme_classic() +
   mytheme
 

@@ -30,6 +30,8 @@ risk_all <- risk_all %>%
 
 ```
 
+
+
 ```{r theme}
 
 mytheme = theme(
@@ -52,7 +54,7 @@ risk_all %>%
   labs(x = "",
        y = "Risk Levels") +
   scale_x_discrete(labels = c("Stay with Friends", "Approach Barista")) +
-  scale_y_continuous(limits = c(0, 4)) +
+  scale_y_continuous(limits = c(1, 5)) +
   theme_classic() +
   mytheme
 

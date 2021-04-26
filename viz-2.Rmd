@@ -30,6 +30,44 @@ risk_all <- risk_all %>%
 
 ```
 
+```{r recode}
+risk_all <- risk_all %>% 
+  mutate(risklevel = case_when(risklevel == 0 ~ 1,
+                               risklevel == 1 ~ 2,
+                               risklevel == 2 ~ 3,
+                               risklevel == 3 ~ 4,
+                               risklevel == 4 ~ 5,
+                               risklevel == 5 ~ 6,
+                               risklevel == 6 ~7),
+         neg = case_when(neg == 0 ~ 1,
+                         neg == 1 ~ 2,
+                         neg == 2 ~ 3,
+                         neg == 3 ~ 4,
+                         neg == 4 ~ 5),
+         pos = case_when(pos == 0 ~ 1,
+                         pos == 1 ~ 2,
+                         pos == 2 ~ 3,
+                         pos == 3 ~ 4,
+                         pos == 4 ~ 5),
+         alert = case_when(alert == 0 ~ 1,
+                         alert == 1 ~ 2,
+                         alert == 2 ~ 3,
+                         alert == 3 ~ 4,
+                         alert == 4 ~ 5),
+         riskyrisk = case_when(riskyrisk == 0 ~ 1,
+                         riskyrisk == 1 ~ 2,
+                         riskyrisk == 2 ~ 3,
+                         riskyrisk == 3 ~ 4,
+                         riskyrisk == 4 ~ 5),
+         riskavrisk = case_when(riskavrisk == 0 ~ 1,
+                         riskavrisk == 1 ~ 2,
+                         riskavrisk == 2 ~ 3,
+                         riskavrisk == 3 ~ 4,
+                         riskavrisk == 4 ~ 5))
+
+summary(risk_all)
+```
+
 ```{r theme}
 
 mytheme = theme(
@@ -53,16 +91,18 @@ risk_all %>%
     sd = sd(riskrating)
   ) %>% 
   ggplot(aes(x = option, y = mean)) +
-  
-  geom_bar(stat = "identity", fill = "grey",position=position_dodge(), width = .5) +  
+  geom_bar(stat = "identity", fill = "grey", position=position_dodge(), width = .5) +  
   geom_errorbar(aes(ymin= mean-sd, ymax = mean + sd),  width=.15, position=position_dodge(.9)) +
   labs(x = "",
        y = "Riskiness") +
   scale_x_discrete(labels = c("Stay with Friends", "Approach Barista")) +
-  scale_y_continuous(limits = c(-1, 4)) +
+      coord_cartesian(ylim=c(0, 5)) +
   theme_classic() +
   mytheme
 
+# Hadley explains this on pp. 99; 133 of his ggplot2 book (1st edition), or pp. 160 - 161 if you have the second edition.
+# 
+# The issue is that, as you say, limits inside the scale or setting ylim() causes data to be thrown away, as they are constraining the data. For a true zoom (keep all the data), you need to set the limits inside of the Cartesian coordinate system (or other coordinate systems https://ggplot2.tidyverse.org/reference/#section-coordinate-systems). For more see: http://docs.ggplot2.org/current/coord_cartesian.html
 
 dev.off()
 
@@ -90,12 +130,13 @@ jpeg("rt_bar.jpg", width = 500, height = 380)
 
 df %>% 
   ggplot(aes(y = mean_risk, x = condition)) +
-  geom_bar(stat = "identity", fill = "grey",position=position_dodge(), width = .5) +
+  geom_bar(stat = "identity", fill = "grey", position=position_dodge(), width = .5) +
   geom_errorbar(aes(ymin = mean_risk - sd_risk, ymax = mean_risk + sd_risk),  width=.15, position=position_dodge(.9)) +
   labs(x = "",
        y = "Risk Taking Levels") +
   scale_x_discrete(labels = c("Self", "Surrogate", "Prediction")) +
-  scale_y_continuous(limits = c(0,6), breaks = c(0,1,2,3,4,5,6)) +
+  coord_cartesian(ylim = c(1,7)) +
+  scale_y_continuous(breaks = c(1,2,3,4,5,6,7)) +
   theme_classic() +
   mytheme
 
@@ -113,8 +154,8 @@ df %>%
   labs(x = "",
        y = "Negative Emotion") +
   scale_x_discrete(labels = c("Self", "Surrogate", "Prediction")) +
-  scale_y_continuous(limits = c(0,4)) +
-  theme_classic() +
+coord_cartesian(ylim = c(1,5)) +
+  scale_y_continuous(breaks = c(1,2,3,4,5)) +  theme_classic() +
   mytheme
 
 dev.off()
@@ -131,6 +172,8 @@ df %>%
   labs(x = "",
        y = "Positive Emotion") +
   scale_x_discrete(labels = c("Self", "Surrogate", "Prediction")) +
+  coord_cartesian(ylim = c(1,5)) +
+  scale_y_continuous(breaks = c(1,2,3,4,5)) +
   theme_classic() +
   mytheme
 
@@ -148,6 +191,8 @@ df %>%
   labs(x = "",
        y = "Alertness") +
   scale_x_discrete(labels = c("Self", "Surrogate", "Prediction")) +
+    coord_cartesian(ylim = c(1,5)) +
+  scale_y_continuous(breaks = c(1,2,3,4,5)) +
   theme_classic() +
   mytheme
 
